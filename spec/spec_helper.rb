@@ -41,6 +41,10 @@ def sample_rss_feed
   load_sample("TenderLovemaking.xml")
 end
 
+def sample_rss_feed_with_author
+  load_sample("TenderLovemaking_author.xml")
+end
+
 def sample_rss_entry_content
   load_sample("TenderLovemakingFirstEntry.xml")
 end

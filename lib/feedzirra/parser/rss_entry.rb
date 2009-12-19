@@ -18,8 +18,8 @@ module Feedzirra
       element :title
       element :link, :as => :url
 
-      element :"dc:creator", :as => :author
-      element :author, :as => :author
+      elements :"dc:creator", :as => :authors
+      elements :author, :as => :authors
       element :"content:encoded", :as => :content
       element :description, :as => :summary
 

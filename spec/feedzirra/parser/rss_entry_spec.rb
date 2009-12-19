@@ -1,6 +1,6 @@
 require File.join(File.dirname(__FILE__), %w[.. .. spec_helper])
 
-describe Feedzirra::Parser::RSSEntry do
+shared_examples_for "Feedzirra::Parser::RSSEntry" do
   before(:each) do
     # I don't really like doing it this way because these unit test should only rely on RSSEntry,
     # but this is actually how it should work. You would never just pass entry xml straight to the AtomEnry
@@ -13,10 +13,6 @@ describe Feedzirra::Parser::RSSEntry do
   
   it "should parse the url" do
     @entry.url.should == "http://tenderlovemaking.com/2008/12/04/nokogiris-slop-feature/"
-  end
-  
-  it "should parse the author" do
-    @entry.author.should == "Aaron Patterson"
   end
   
   it "should parse the content" do
@@ -37,5 +33,23 @@ describe Feedzirra::Parser::RSSEntry do
   
   it "should parse the guid as id" do
     @entry.id.should == "http://tenderlovemaking.com/?p=198"
+  end
+end
+
+describe "Feedzirra::Parser::RSSEntry with dc:creator" do
+  it_should_behave_like "Feedzirra::Parser::RSSEntry"
+  
+  it "should parse the authors from the dc:creator elements" do
+    @entry = Feedzirra::Parser::RSS.parse(sample_rss_feed).entries.first
+    @entry.authors.should == ["Aaron Patterson"]
+  end
+end
+
+describe "Feedzirra::Parser::RSSEntry with author" do
+  it_should_behave_like "Feedzirra::Parser::RSSEntry"
+  
+  it "should parse the author from the sole author element" do
+    @entry = Feedzirra::Parser::RSS.parse(sample_rss_feed_with_author).entries.first
+    @entry.authors.should == ["aaron@patterson.com (Aaron Patterson)"]
   end
 end
